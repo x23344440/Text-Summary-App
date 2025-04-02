@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .news-container, .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        select, textarea, button {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            height: 150px;
+            overflow-y: scroll;
+            resize: none;
+        }
+        button {
+            background-color: #2196F3;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+        button:hover {
+            background-color: #1976D2;
+        }
+        .news-output, .output {
+            margin-top: 20px;
+            padding: 10px;
+            background: #fff;
+            border-radius: 5px;
+            max-height: 200px;
+            /* overflow-y: scroll; */
+        }
+        hr {
+            margin-top: 30px;
+            border: none;
+            height: 1px;
+            background: #ddd;
+        }
+        
+    </style>
+    <link rel="stylesheet" href="static/css/adminlte.css" />
+</head>
+<body>
+    <nav class="navbar" style="background-color: black; color: white; padding: 10px;">
+        <div class="container-fluid d-flex justify-content-between">
+            <a href="/all" class="navbar-brand text-white">Scalable Cloud</a>
+            <a href="/login" class="btn btn-outline-light">Logout</a>
+        </div>
+    </nav>
+    
+
+    <h1 style="margin-top: 3%;">News Fetcher</h1>
+    <div style="display: flex;border: dashed;padding: inherit;">
+    <div class="news-container" style="width: 39%;">
+        <h1 style="color: #2196F3;">Get Latest News</h1>
+        <p style="font-size: 14px; color: #666;">Select a keyword and country to fetch news</p>
+        <form method="post" action="/news">
+            <label for="keyword">Select Keyword:</label>
+            <select name="keyword" id="keyword">
+                <option value="sports">Sports</option>
+                <option value="business">Business</option>
+                <option value="entertainment">Entertainment</option>
+                <option value="technology">Technology</option>
+            </select>
+            
+            <label for="country">Select Country:</label>
+            <select name="country" id="country">
+                <option value="us">United States</option>
+                <option value="au">Australia</option>
+                <option value="uk">United Kingdom</option>
+                <option value="in">India</option>
+            </select>
+            
+            <button type="submit">Get News</button>
+        </form>
+        
+    </div>
+    <div class="news-container" style="margin-left: 2%;width: 58%; overflow: auto;">
+        <div class="news-output"style="height: 84%;">
+            <h3>Top News:</h3>
+            <p id="newsResults">Latest news will appear here...</p>
+            {%for news in news_list%}
+            <h3>Title:</h3><p>{{ news.title }}</p>
+            <h3>Description:</h3><p>{{ news.description }}</p>
+            {%endfor%}
+        </div>
+    </div></div>
+    
+    <h1 style="margin-left: 1%;">Text Summary</h1>
+    <div style="display: flex;border: dashed;padding: inherit;">
+    <div class="container" style="width: 39%;">
+        <h1 style="color: #2196F3;">Text Summarizer</h1>
+        <p style="font-size: 14px; color: #666;">Enter text to get a summarized version</p>
+        <form method="post" action="/summarization">
+            <textarea name="text" id="textInput" placeholder="Enter text here...">{{ descriptions }}</textarea>
+            <button type="submit">Summarize</button>
+        </form>
+        
+    </div>
+    <div class="container" style="margin-left: 2%;width: 58%; overflow: auto;">
+        <div class="output" style="height: 84%;">
+            <h3>Summary:</h3>
+            <p id="summarizedText">Your summarized text will appear here...</p>
+            <p>{{ summary_text }}</p>
+        </div>
+    </div>
+    </div>
+
+      <!-- Text to Speech -->
+      <h1 style="margin-left: 5%;">Audio Download</h1>
+      <div style="display: flex;border: dashed;padding: inherit;">
+      <div class="container" style="width: 39%;">
+        <h1 style="color: #2196F3;">Text to Speech</h1>
+        <form  action="/text_to_speech" method="post">
+            <textarea id="text" name="text" placeholder="Enter text here...">{{ summary_text }}</textarea>
+            <button type="submit">Convert to Audio</button>
+        </form>
+       
+    </div>
+    <div class="container"  style="margin-left: 2%;width: 58%; overflow: auto;">
+        <div class="output" style="height: 84%;">
+            <h3>Link:</h3>
+            <p id="summarizedText">Your download link will appear here...</p>
+            
+        {% if download_url %}
+        <a class="download-link" href="{{ download_url }}" download>Download Audio</a>
+    {% endif %}
+    </div></div>
+    <hr>
+   
+</body>
+</html>
